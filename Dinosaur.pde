@@ -1,8 +1,8 @@
-class Dinosaur {
+class Dinosaur extends Enemy{
 	// Requirement #4: Complete Dinosaur Class
 
 	final float TRIGGERED_SPEED_MULTIPLIER = 5;
-
+  float speed = 1f; 
 	// HINT: Player Detection in update()
 	/*
 	float currentSpeed = speed
@@ -10,4 +10,34 @@ class Dinosaur {
 		currentSpeed *= TRIGGERED_SPEED_MULTIPLIER
 	}
 	*/
+  void display(){
+    pushMatrix();
+    if(speed > 0){
+      translate(x, y);
+      scale(1,1);
+      image(dinosaur, 0, 0);
+    }else{
+      translate(x+w, y);
+      scale(-1, 1);
+      image(dinosaur, 0, 0);
+    }
+    popMatrix();
+  }
+  
+  void update(){
+    //move opposite direction when dino reach side
+    if(x >= width-w || x <= 0) speed = speed*-1;
+    
+    //speed up when dino see player
+    if(y == player.y){
+      if((speed > 0 && player.x > x) || (speed < 0 && player.y < y)){
+        speed = speed*TRIGGERED_SPEED_MULTIPLIER;
+      }
+    }
+    x += speed;
+  }
+  
+  Dinosaur(float x,float y){
+    super(x,y);
+  } 
 }
